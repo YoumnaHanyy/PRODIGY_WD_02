@@ -1,0 +1,237 @@
+<html>
+    <style>
+        body{
+background-color: #cabac2;
+        }
+
+        .head{
+color: #360921;
+font-family: "Whisper", cursive;
+font-weight: 400;
+  font-style: normal;
+        }
+
+.Main{
+ 
+    border-width: 1px;
+    border-radius: 30px;
+    background-color:  #360921;
+    width: 50%;
+    height: 70%;
+    margin-left: 310px;
+    margin-top: 80px;
+}
+.Main h3{
+    color: white;
+  margin-left: 220px;
+  padding-top: 50px;
+}
+.buttons{
+    margin-left: 110px;
+    margin-top: 20px;
+   
+}
+.buttons button{
+    margin-right: 60px;
+   width: 100px;
+   height: 30px;
+    border-radius: 20px;
+    
+}
+.start{
+    background-color: rgb(255, 99, 203);
+    border: none;
+}
+
+.Stop{
+    background-color:  rgb(255, 99, 203); 
+    border: none;
+    color: white;
+}
+.Reset{
+    background-color:  rgb(255, 99, 203);
+    border: none;
+}
+.timer{
+    color: white;
+    font-size: 5.0em;
+    margin-left: 190px;
+    
+}
+.info{
+    color: white;
+    display: flex; 
+    margin-left: 215px;
+    margin-top: -5px;
+}
+.info p{
+    margin-right: 60px;
+    font-size: 0.8em;
+}
+.Lap {
+            background-color: rgba(255, 255, 255, 0.4);
+            color: white;
+        }
+
+        .lapTimes {
+            border-width: 1px;
+            border: 1px solid white;
+            width: 160px;
+            height: 150px;
+            margin-top: 20px;
+            margin-left: 245px;
+            overflow-y: auto;
+        }
+
+        .lapTimes table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        .lapTimes th, .lapTimes td {
+            padding: 10px;
+            text-align: center;
+            color: white;
+            border-bottom: 1px solid white;
+        }
+
+        .lapTimes th {
+            background-color: #360921;
+            position: sticky;
+            top: 0;
+        }
+
+        .lapTimes td {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .lapTimes::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .lapTimes::-webkit-scrollbar-thumb {
+            background-color: #ffb6c1;
+            border-radius: 5px;
+        }
+    </style>
+
+
+
+<head>
+    <title>StopWatch</title>
+
+</head>
+    <body>
+        <h1 class="head">StopWatch</h1>
+        <div class="Main">
+            <h3>Online Timer & StopWatch</h1>
+        <div class="timerplace" id="timerplace">
+<span class="timer" id="display">00:00:00</span>
+</div>
+<div class="info">
+    <p>Hours</p>
+    <p>Minutes</p>
+    <p>Seconds</p>
+</div>
+<div class="buttons">
+    <button class="start" id="start" onclick="startStopwatch()">Start</button>
+    <button class="Reset" id="Reset" onclick=" resetStopwatch()">Reset</button>
+    <button class="Lap" id="Lap" onclick="recordLap()">Lap</button>
+    
+</div>
+<div class="lapTimes" id="lapTimes">
+    <table>
+        <table>
+            <thead>
+                <tr>
+                    <th>Lap</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody id="lapEntries">
+               
+            </tbody>
+        </table>
+   
+</div>
+</div>
+    </body>
+
+    <script>
+
+let stopwatch;
+let seconds = 0;
+let minutes = 0;
+let hours = 0;
+let lapCounter = 1;
+updateStopwatchDisplay();
+
+
+function startStopwatch() {
+    if (!stopwatch) {
+        stopwatch = setInterval(updateStopwatch, 1000);
+        document.getElementById('start').textContent = 'Stop';
+    } else {
+        clearInterval(stopwatch);
+        stopwatch = null;
+        document.getElementById('start').textContent = 'Start';
+    }
+}
+
+function updateStopwatch() {
+    seconds++;
+
+    if (seconds === 60) {
+        seconds = 0;
+        minutes++;
+
+        if (minutes === 60) {
+            minutes = 0;
+            hours++;
+        }
+    }
+
+    const display = document.getElementById('display');
+    display.textContent = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+}
+
+function pad(value) {
+    return value < 10 ? '0' + value : value;
+}
+
+function resetStopwatch() {
+    clearInterval(stopwatch);
+    stopwatch = null;
+    seconds = 0;
+    minutes = 0;
+    hours = 0;
+    document.getElementById('start').textContent = 'Start';
+
+    // Clear lap times
+    const lapEntries = document.getElementById('lapEntries');
+    lapEntries.innerHTML = '';
+    
+    // Reset lap counter
+    lapCounter = 1;
+
+    // Update stopwatch display
+    updateStopwatchDisplay();
+}
+document.getElementById('Reset').addEventListener('click', resetStopwatch);
+
+
+function recordLap() {
+        const lapEntries = document.getElementById('lapEntries');
+        const lapTime = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `<td>Lap ${lapCounter++}</td><td>${lapTime}</td>`;
+        lapEntries.appendChild(newRow);
+    }
+
+    function updateStopwatchDisplay() {
+        const display = document.getElementById('display');
+        display.textContent = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+    }
+    </script>
+</html>
